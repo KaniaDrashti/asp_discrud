@@ -1,0 +1,41 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Discon.aspx.cs" Inherits="Discon" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div>
+        <asp:Label ID="Label1" runat="server" Text="pid"></asp:Label>
+        <asp:TextBox ID="Txtpid" runat="server"></asp:TextBox>
+        <br />
+        <asp:Label ID="Label2" runat="server" Text="pname"></asp:Label>
+        <asp:TextBox ID="Txtpname" runat="server"></asp:TextBox>
+        <br />
+        <asp:Label ID="Label3" runat="server" Text="oid"></asp:Label>
+        <asp:DropDownList ID="DropDownList1" runat="server" DataSourceID="SqlDataSource1" DataTextField="oname" DataValueField="oid" ></asp:DropDownList>
+        <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:praccon %>" ProviderName="<%$ ConnectionStrings:praccon.ProviderName %>" SelectCommand="SELECT * FROM [order]"></asp:SqlDataSource>
+        <br />
+        <asp:Label ID="Label4" runat="server" Text="deptid"></asp:Label>
+        <asp:DropDownList ID="DropDownList2" runat="server" DataSourceID="SqlDataSource2" DataTextField="deptname" DataValueField="deptid"></asp:DropDownList>
+        <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:pracconConnectionString %>" SelectCommand="SELECT * FROM [dept]"></asp:SqlDataSource>
+        <br />
+        <asp:Label ID="Label5" runat="server" Text="pqty"></asp:Label>
+        <asp:TextBox ID="Txtpqty" runat="server"></asp:TextBox>
+        <br />
+        <asp:Label ID="Label6" runat="server" Text="price"></asp:Label>
+        <asp:TextBox ID="Txtprice" runat="server"></asp:TextBox>
+
+        <br />
+        <asp:Button ID="BtnSave" runat="server" Text="Save" OnClick="BtnSave_Click" />
+        <asp:Button ID="BtnRemove" runat="server" Text="Remove" OnClick="BtnRemove_Click" />
+        <asp:Button ID="BtnFind" runat="server" Text="Find" OnClick="BtnFind_Click" />
+        <asp:Button ID="BtnDisplay" runat="server" Text="display" OnClick="BtnDisplay_Click" />
+        <asp:Button ID="btnupdate" runat="server" OnClick="btnupdate_Click" Text="Update" />
+    </div>
+    </form>
+</body>
+</html>

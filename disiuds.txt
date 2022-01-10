@@ -1,0 +1,137 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data.Sql;
+using System.Data.SqlClient;
+using System.Configuration;
+using System.Data;
+
+public partial class Discon : System.Web.UI.Page
+{
+    String str;
+    SqlDataAdapter adap;
+    SqlDataReader dr;
+    DataSet ds;
+    static int rindex;
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        str = ConfigurationManager.ConnectionStrings["praccon"].ConnectionString;
+       if(!IsPostBack)
+        {
+            load_grid();
+        }
+    }
+    public void load_grid()
+    {
+        adap = new SqlDataAdapter("select * from product",str);
+        ds = new DataSet();
+        adap.Fill(ds);
+        adap.Dispose();
+        ds.Dispose();
+    }
+    protected void BtnSave_Click(object sender, EventArgs e)
+    {
+        adap = new SqlDataAdapter("select * from Product", str);
+        ds = new DataSet();
+        adap.Fill(ds);
+        DataRow dr = ds.Tables[0].NewRow();
+        dr[0] = Convert.ToInt64(Txtpid.Text);
+        dr[1] = Txtpname.Text;
+        dr[2] = DropDownList1.SelectedValue.ToString();
+        dr[3] = DropDownList2.SelectedValue.ToString();
+        dr[4] = Txtpqty.Text;
+        dr[5] = Txtprice.Text;
+        ds.Tables[0].Rows.Add(dr);
+        SqlCommandBuilder cb = new SqlCommandBuilder(adap);
+        adap.UpdateCommand = cb.GetUpdateCommand();
+        int i = adap.Update(ds);
+        if (i > 0)
+        {
+            Response.Write("sucessfully");
+        }
+        else
+        {
+            Response.Write("not correct");
+        }
+
+    }
+
+    protected void BtnRemove_Click(object sender, EventArgs e)
+    {
+        adap = new SqlDataAdapter("delete from product where pid='" + Txtpid.Text +"'",str);
+        ds = new DataSet();
+        adap.Fill(ds);
+        Txtpid.Text = "";
+        Txtpname.Text = "";
+        DropDownList1.SelectedItem.Text = "";
+        DropDownList2.SelectedItem.Text = "";
+        Txtpqty.Text = "";
+        Txtprice.Text = "";
+        adap.Dispose();
+        ds.Dispose();
+
+    }
+
+    protected void BtnFind_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            adap = new SqlDataAdapter("SELECT * FROM product WHERE pid = '" + Txtpid.Text + "'", str);
+            ds = new DataSet();
+            adap.Fill(ds);
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                DataRow dr = ds.Tables[0].Rows[0];
+                Txtpid.Text = dr["pid"].ToString();
+                Txtpname.Text = dr["pname"].ToString();
+                DropDownList1.SelectedItem.ToString();
+                DropDownList2.SelectedItem.ToString();
+                Txtpqty.Text = dr["pqty"].ToString();
+                Txtprice.Text = dr["price"].ToString();
+                
+            }
+            else
+            {
+                Label1.Text = "No data found";
+            }
+        }
+        catch (Exception ex)
+        {
+            Response.Write(ex.Message);
+        }
+        finally
+        {
+            ds.Dispose();
+            adap.Dispose();
+        }
+    }
+
+    protected void btnupdate_Click(object sender, EventArgs e)
+    {
+        adap = new SqlDataAdapter("select * from product", str);
+        SqlCommandBuilder cb = new SqlCommandBuilder(adap);
+        ds = new DataSet();
+        adap.Fill(ds);
+        DataRow dr = ds.Tables[0].Rows[rindex];
+        dr.BeginEdit();
+        dr[0] = Convert.ToInt64(Txtpid.Text);
+        dr[1] = Txtpname.Text;
+        dr[2] = DropDownList1.SelectedValue.ToString();
+        dr[3] = DropDownList2.SelectedValue.ToString();
+        dr[4] = Txtpqty.Text;
+        dr[5] = Txtprice.Text;
+     
+
+        dr.EndEdit();
+        adap.Update(ds);
+
+    }
+
+    protected void BtnDisplay_Click(object sender, EventArgs e)
+    {
+
+    }
+}
